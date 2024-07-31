@@ -35,6 +35,7 @@ exports.updateUser = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(id, updatedData, {
       new: true,
       runValidators: true,
+      select: "-password",
     });
 
     if (!updatedUser) {
