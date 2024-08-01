@@ -2,6 +2,7 @@ const User = require("../models/User");
 const mongoose = require("mongoose");
 
 exports.getUser = async (req, res) => {
+  console.log("aici");
   try {
     const { id } = req.params;
 
@@ -16,6 +17,17 @@ exports.getUser = async (req, res) => {
     }
 
     res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.getDoctors = async (req, res) => {
+  try {
+    const doctors = await User.find({ role: "doctor" }).select("name");
+
+    res.json(doctors);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

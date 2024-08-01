@@ -1,11 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const {
+  getDoctors,
   getUser,
   updateUser,
   deleteUser,
 } = require("../controllers/userController");
 const { authenticate } = require("../middleware/authMiddleware");
+
+// @route    GET /user/doctors
+// @desc     Get all doctors
+// @access   Private
+router.get("/doctors", authenticate, getDoctors);
 
 // @route    GET /user/:id
 // @desc     Get user by ID
