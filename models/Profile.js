@@ -6,13 +6,14 @@ const ProfileSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
       required: true,
+      unique: true,
     },
     bio: {
       type: String,
     },
     specialties: [
       {
-        type: String,
+        type: [String],
       },
     ],
     location: {
@@ -23,6 +24,20 @@ const ProfileSchema = new mongoose.Schema(
         type: Date,
       },
     ],
+    phoneNumber: {
+      type: String,
+      validate: {
+        validator: function (v) {
+          return /^\d{10}$/.test(v);
+        },
+        message: (props) =>
+          `${props.value} is not a valid phone number! It should be exactly 10 digits.`,
+      },
+      required: [true, "User phone number required"],
+    },
+    avatar: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
