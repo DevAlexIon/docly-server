@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const appointmentRoutes = require("./routes/appointment");
+const profileRoutes = require("./routes/profile");
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/appointment", appointmentRoutes);
+app.use("/profile", profileRoutes);
 
 app.get("/", (req, res) => {
   res.send("Doctor Appointment Platform API");
