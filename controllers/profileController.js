@@ -51,6 +51,38 @@ exports.createProfile = async (req, res) => {
   }
 };
 
+exports.updateProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ msg: "Invalid profile ID" });
+    }
+
+    const updatedData = req.body;
+
+    const updatedProfile = await Profile.findByIdAndUpdate(id, updatedData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedProfile) {
+      return res.status(400).json({ msg: "Profile not found!" });
+    }
+
+    res.json(updatedProfile);
+  } catch (err) {
+    console.error(err.message);
+
+    if (err.name === "ValidationError") {
+      const firstErrorMessage = Object.values(err.errors)[0].message;
+      return res.status(400).json({ msg: firstErrorMessage });
+    }
+
+    res.status(500).json({ msg: "Internal Server Error" });
+  }
+};
+
 exports.deleteProfile = async (req, res) => {
   try {
     const { id } = req.params;
