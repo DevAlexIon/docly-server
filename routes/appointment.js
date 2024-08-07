@@ -8,10 +8,10 @@ const {
 } = require("../controllers/appointmentController");
 const { authenticate } = require("../middleware/authMiddleware");
 
-// @route    GET /appointment/:id
+// @route    GET /appointment/user/:id
 // @desc     Get all appointments for a user
 // @access   Private
-router.get("/:id", authenticate, getAppointment);
+router.get("/user/:id", authenticate, getAppointment);
 
 // @route    POST /appointment
 // @desc     Create an appointment
