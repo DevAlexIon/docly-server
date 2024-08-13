@@ -5,6 +5,7 @@ const {
   createAppointment,
   updateAppointment,
   deleteAppointment,
+  filterAppointments,
 } = require("../controllers/appointmentController");
 const { authenticate } = require("../middleware/authMiddleware");
 
@@ -27,5 +28,10 @@ router.patch("/:id", authenticate, updateAppointment);
 // @desc     Delete an appointment
 // @access   Private
 router.delete("/:id", authenticate, deleteAppointment);
+
+// @route    GET /appointment/filter
+// @desc     Filter appointments
+// @access   Private
+router.get("/filter", authenticate, filterAppointments);
 
 module.exports = router;

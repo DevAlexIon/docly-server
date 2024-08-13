@@ -158,3 +158,59 @@ exports.deleteAppointment = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
+exports.filterAppointments = async (req, res) => {
+  try {
+    const { date, status, doctor, patient } = req.query;
+
+    const query = {};
+
+    if (date) {
+      const formattedDate = new Date(date);
+      if (!isNaN(formattedDate.getTime())) {
+        query.date = formattedDate;
+      } else {
+        return res.status(400).json({ msg: "Invalid date format" });
+      }
+    }
+
+    if (status) {
+      query.status = status;
+    }
+
+    if (doctor) {
+      if (mongoose.Types.ObjectId.isValid(doctor)) {
+        query.doctor = doctor;
+      } else {
+        return res.status(400).json({ msg: "Invalid doctor ID" });
+      }
+    }
+
+    if (patient) {
+      if (mongoose.Types.ObjectId.isValid(patient)) {
+        query.patient = patient;
+      } else {
+        return res.status(400).json({ msg: "Invalid patient ID" });
+      }
+    }
+
+    const appointments = await Appointment.find(query)
+      .populate({
+        path: "doctor",
+        select: "name",
+      })
+      .populate({
+        path: "patient",
+        select: "name",
+      });
+
+    if (!appointments.length) {
+      return res.status(404).json({ msg: "No appointments found" });
+    }
+
+    res.json(appointments);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
